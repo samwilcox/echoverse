@@ -1,0 +1,10 @@
+{
+    "name": "English (US-American)",
+    "folder": "en-us",
+    "author": "Echoverse",
+    "authorEmail": "sam@echoversebbs.com",
+    "authorUrl": "https://www.echoversebbs.com",
+    "files": [
+        "globals"
+    ]
+}
