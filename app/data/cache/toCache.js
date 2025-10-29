@@ -22,7 +22,8 @@ const toCache = () => {
         'members',
         'settings',
         'locales',
-        'themes'
+        'themes',
+        'member_devices',
     ];
 };
 

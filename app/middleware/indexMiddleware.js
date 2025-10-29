@@ -18,6 +18,7 @@ const session = require('express-session');
 const passport = require('passport');
 const ejsLayouts = require('express-ejs-layouts');
 const { secureStateMiddleware } = require('securestate');
+const sessionMiddleware = require('./sessionMiddleware');
 
 /**
  * Setup all the middleware for Echoverse.
@@ -40,4 +41,5 @@ module.exports = (app) => {
             maxAge: parseInt(process.env.SESSION_COOKIE_MAX_AGE_SECONDS, 10),
         },
     }));
+    app.use(sessionMiddleware);
 };
