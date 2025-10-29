@@ -38,6 +38,48 @@ class UtilHelper {
             }
         }
     } 
+
+    /**
+     * Get the current user's IP address.
+     * 
+     * @param {Object} req - The request object from Express.
+     * @returns {string} The user's IP address.
+     */
+    static getUserIp(req) {
+        let ip = req.ip;
+
+        if (ip === '::1' || ip.startsWith('::ffff:')) {
+            ip = '127.0.0.1';
+        }
+
+        return ip;
+    }
+
+    /**
+     * Detects whether the user is a search bot.
+     * 
+     * @param {Object} req - The request object from Express.
+     * @returns {Object} Object containing resulting data.
+     */
+    static detectBots(req) {
+        const userAgent = req.headers['user-agent'];
+        const botData = { isBot: false, name: null };
+        const bots = Settings.get('searchBotListing');
+
+        if (bots) {
+            for (const bot of bots) {
+                const pattern = typeof bot.pattern === 'string' ? new RegExp(bot.pattern) : bot.pattern;
+
+                if (pattern.test(userAgent)) {
+                    botData.isBot = true;
+                    botData.name = bot.name;
+                    break;
+                }
+            }
+        }
+
+        return botData;
+    }
 }
 
 module.exports = UtilHelper;

@@ -29,12 +29,28 @@ class SessionRepository {
     }
 
     /**
+     * Build a 'Session' entity from raw data.
      * 
      * @param {Object} data - The raw session data.
      * @param {string} sessionId - The session identifier.
+     * @returns {Session|null} The constructed 'Session' entity or null if data is invalid.
      */
     static buildSessionFromData(data, sessionId) {
+        const Session = require('../entities/session');
+        const session = new Session();
+        session.id = data ? data.id : sessionId;
+        return session;
+    }
 
+    /**
+     * Get the 'Session' entity by ID.
+     * 
+     * @param {string} sessionId - The session identifier.
+     * @returns {Session|null} The 'Session' entity or null if not found.
+     */
+    static getSessionById(sessionId) {
+        const data = this.loadSessionDataById(sessionId);
+        return this.buildSessionFromData(data, sessionId);
     }
 }
 

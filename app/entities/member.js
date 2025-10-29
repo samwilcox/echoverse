@@ -28,6 +28,10 @@ class Member {
         this._themeId = null;
         this._signedIn = false;
         this._configs = {};
+        this._useDisplayName = false;
+        this._dateTime = {};
+        this._primaryGroup = null;
+        this._secondaryGroups = null;
     }
 
     /**
@@ -193,6 +197,78 @@ class Member {
     }
 
     /**
+     * Get this member's display name display flag.
+     * 
+     * @returns {boolean} True to display the member's display name, false not to.
+     */
+    get useDisplayName() {
+        return this._useDisplayName;
+    }
+
+    /**
+     * Set this member's display name display flag.
+     * 
+     * @param {boolean} value - True to display the member's display name, false not to.
+     */
+    set useDisplayName(value) {
+        this._useDisplayName = value;
+    }
+
+    /**
+     * Get the member's date time data object instance.
+     * 
+     * @returns {Object} The member's date time data object instance.
+     */
+    get dateTime() {
+        return this._dateTime;
+    }
+
+    /**
+     * Set the member's date time data object instance.
+     * 
+     * @param {Object} value - The member's date time data object instance.
+     */
+    set dateTime(value) {
+        this._dateTime = value;
+    }
+
+    /**
+     * Get this member's primary group identifier.
+     * 
+     * @returns {number} The member's primary group identifier.
+     */
+    get primaryGroup() {
+        return this._primaryGroup;
+    }
+
+    /**
+     * Set this member's primary group identifier.
+     * 
+     * @param {number} value - The member's primary group identifier.
+     */
+    set primaryGroup(value) {
+        this._primaryGroup = value;
+    }
+
+    /**
+     * Get this member's secondary group identifiers.
+     * 
+     * @returns {number[]|null} An array of group identifiers, null if not part of any secondary group.
+     */
+    get secondaryGroups() {
+        return this._secondaryGroups;
+    }
+
+    /**
+     * Set this member's secondary group identifiers.
+     * 
+     * @param {number[]|null} value - An array of group identifiers, null if not part of any secondary group. 
+     */
+    set secondaryGroups(value) {
+        this.secondaryGroups = value;
+    }
+
+    /**
      * Convert this Member instance to a plain object.
      * 
      * @returns {Object} A plain object representation of this Member.
@@ -211,7 +287,11 @@ class Member {
             createdAt: this._createdAt,
             updatedAt: this._updatedAt,
             lastLogin: this._lastLogin,
-            isAdmin: this._isAdmin
+            isAdmin: this._isAdmin,
+            useDisplayName: this._useDisplayName,
+            dateTime: this._dateTime,
+            primaryGroup: this._primaryGroup,
+            secondaryGroups: this._secondaryGroups,
         };
     }
 
@@ -237,6 +317,10 @@ class Member {
         member.updatedAt = obj.updatedAt ?? null;
         member.lastLogin = obj.lastLogin ?? null;
         member.isAdmin = obj.isAdmin ?? false;
+        member.useDisplayName = obj.useDisplayName ?? false;
+        member.dateTime = obj.dateTime ?? {};
+        member.primaryGroup = obj.primaryGroup ?? null;
+        member.secondaryGroups = obj.secondaryGroups ?? null;
         
         return member;
     }

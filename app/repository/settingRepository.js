@@ -11,7 +11,6 @@
  * https://license.echoversebbs.com
  */
 
-const { type } = require('os');
 const UtilHelper = require('../helpers/utilHelper');
 
 /**
