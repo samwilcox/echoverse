@@ -17,3 +17,26 @@ const initializeDatabase = require('./services/databaseService');
 const initializeCache = require('./services/cacheService');
 const initializeSettings = require('./services/settingsService');
 const initializeRoutes = require('./services/routesService');
+const initializeMiddleware = require('./middleware/indexMiddleware');
+const startServer = require('./services/serverService');
+const Settings = require('./settings');
+const UtilHelper = require('./helpers/utilHelper');
+
+/**
+ * Initializes the Echoverse application.
+ */
+module.exports = () => {
+    initializeDatabase()
+        .then(() => initializeCache())
+        .then(() => {
+            initializeSettings();
+            initializeMiddleware(app);
+            initializeRoutes(app);
+            UtilHelper.initializeBreadcrumbs();
+            startServer(app);
+        })
+        .catch(error => {
+            UtilHelper.log(`Error initializing Echoverse: ${error}.`, 'error');
+            process.exit(1);
+        });
+};

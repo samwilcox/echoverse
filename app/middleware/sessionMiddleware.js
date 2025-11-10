@@ -85,12 +85,12 @@ const sessionMiddleware = async (req, res, next) => {
                     create(req, true);
                 }
             } else {
-                req.member = MemberRepository.getMemberById(0);
+                req._member = MemberRepository.getMemberById(0);
                 destroy(req);
                 res.redirect(process.env.BASE_URL);
             }
         } else {
-            req.member = MemberRepository.getMemberById(0);
+            req._member = MemberRepository.getMemberById(0);
             const data = cache.get('sessions');
             let sessionData = data.find(session => session.id == req.sessionID);
             const sessionExists = sessionData && sessionData !== undefined;
@@ -197,7 +197,7 @@ const create = async (req, isMember = false) => {
                 .build()
         )
         .then(result => {
-            UtilHelper.log(`Data inserted successfully: ${result}.`, 'debug');
+            UtilHelper.log(`Data inserted successfully: ${JSON.stringify(result)}.`, 'debug');
         })
         .catch(error => {
             UtilHelper.log(`Error inserting data into the database: ${error}.`, 'error');
@@ -260,7 +260,7 @@ const update = async (req, isMember = false) => {
                 .build()
         )
         .then(result => {
-            UtilHelper.log(`Data updated: ${result}.`, 'debug');
+            UtilHelper.log(`Data updated: ${JSON.stringify(result)}.`, 'debug');
         })
         .catch(error => {
             UtilHelper.log(`Error updating data into the database: ${error}.`, 'error');

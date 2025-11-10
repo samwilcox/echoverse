@@ -1,0 +1,19 @@
+main .menu .header .grid .right a, main .menu .header .grid .right a:link, main .menu .header .grid .right a:active, main .menu .header .grid .right a:visited { color: #FFF; text-decoration: none; transition: 0.5s ease all; padding: 16px; font-weight: 700; font-size: 20px; }
+main .menu .header .grid .right a:hover { color: #DBDBDB; text-decoration: none; }
+.menu-links a, .menu-links a:link, .menu-links a:active, .menu-links a:visited { color: #E0E0E0; text-decoration: none; transition: 0.5s ease all; display: block; padding: 16px 20px; }
+.menu-links a:hover { color: #FFF; text-decoration: none; transition: 0.5s ease all; background-color: #121212; }
+main .body footer .grid .right a, main .body footer .grid .right a:link, main .body footer .grid .right a:active, main .body footer .grid .right a:visited { color: #1ABE71; text-decoration: none; }
+main .body footer .grid .right a:hover { color: #1ABE71; text-decoration: underline; }
+main .body footer .grid .left a, main .body footer .grid .left a:link, main .body footer .grid .left a:active, main .body footer .grid .left a:visited { color: #FFF; text-decoration: none; margin-left: 20px; }
+main .body footer .grid .left a:hover { color: #FFF; text-decoration: underline; }
+main .body footer .grid .left a:first-of-type { margin-left: 0; }
+.category-header .title a, .category-header .title a:link, .category-header .title a:active, .category-header .title a:visited { color: #FFF; text-decoration: none; transition: 0.5s ease all; }
+.category-header .title a:hover { color: #CCCCCC; text-decoration: none; transition: 0.5s ease all; }
+.category-toggle a, .category-toggle a:link, .category-toggle a:active, .category-toggle a:visited { color: #a8c9da; text-decoration: none; transition: 0.5s ease all; font-size: 18px; display: none; }
+.category-toggle a:hover { color: #FFF; text-decoration: none; transition: 0.5s ease all; }
+.forum-title a, .forum-title a:link, .forum-title a:active, .forum-title a:visited { color: var(--forum-color); text-decoration: none; font-weight: 600; font-size: 15px; }
+.forum-title a:hover { color: var(--forum-color); text-decoration: underline; }
+.forum-box .right .topic .grid .inner .top a, .forum-box .right .topic .grid .inner .top a:link, .forum-box .right .topic .grid .inner .top a:active, .forum-box .right .topic .grid .inner .top a:visited { color: #FFF; text-decoration: none; transition: 0.5s ease all; font-weight: 600; font-size: 14px; }
+.forum-box .right .topic .grid .inner .top a:hover { color: #1ABE71; text-decoration: underline; transition: 0.5s ease all; }
+a, a:link, a:active, a:visited { color: #1ABE71; text-decoration: none; transition: 0.5s ease all; }
+a:hover { color: #FFF; text-decoration: underline; transition: 0.5s ease all; }

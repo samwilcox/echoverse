@@ -30,6 +30,9 @@ class QueryBuilder {
             case 'mysql':
                 this._prefix = process.env.MYSQL_TABLE_PREFIX || '';
                 break;
+            case 'sqlite':
+                this._prefix = process.env.SQLITE_TABLE_PREFIX || '';
+                break;
             default:
                 throw new Error(`Unsupported database type: ${process.env.DATABASE_PROVIDER}`);
         }

@@ -12,6 +12,7 @@
  */
 
 const IndexModel = require('../models/indexModel');
+const GlobalsService = require('../services/globalsService');
 
 /**
  * Controller for the index of Echoverse.
@@ -32,7 +33,13 @@ class IndexController {
      * @param {Object} next - The next middleware to execute.
      */
     async buildIndex(req, res, next) {
-        
+        try {
+            const vars = await this._model.buildIndex(req, res, next);
+            const globals = await GlobalsService.get(req);
+            res.render('home/index', { layout: 'layout', ...globals, vars });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

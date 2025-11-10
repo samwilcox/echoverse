@@ -14,6 +14,8 @@
 const Member = require('../entities/member');
 const Settings = require('../settings');
 const GroupRepository = require('./groupRepository');
+const TargetList = require('../lists/targetList');
+const path = require('path');
 
 /**
  * Responsible for handling and retrieval and construction of 'Member' entity.
@@ -28,7 +30,7 @@ class MemberRepository {
     static loadMemberDataById(memberId) {
         const CacheProviderFactory = require('../data/cache/cacheProviderFactory');
         const cache = CacheProviderFactory.create();
-        const data = cache.get('members').find(member => member.id === memberId);
+        const data = cache.get(TargetList.member).find(member => member.id === memberId);
         return data || null;
     }
 
@@ -46,7 +48,7 @@ class MemberRepository {
         const exists = data && Object.keys(data).length > 0;
 
         if (exists) {
-            member.id = data ? data.id : memberId;
+            member.id = data && data.id ? parseInt(data.id) : memberId;
             member.username = data.username;
             member.displayName = data.displayName ? data.displayName : data.username;
             member.emailAddress = data.emailAddress;
@@ -56,18 +58,20 @@ class MemberRepository {
             member.dateTime = data && data.dateTime ? JSON.parse(data.dateTime) : null;
             member.primaryGroup = data && data.primaryGroupId ? GroupRepository.getGroupById(parseInt(data.primaryGroupId, 10)) : null;
 
-            if (data && data.secondaryGroups && data.secondaryGroups.length > 0) {
-                let groups = [];
-                const secondaryGroups = JSON.parse(data.secondaryGroups);
+            // if (data && data.secondaryGroups && data.secondaryGroups.length > 0) {
+            //     let groups = [];
+            //     const secondaryGroups = JSON.parse(data.secondaryGroups);
 
-                secondaryGroups.forEach(group => {
-                    groups.push(GroupRepository.getGroupById(group));
-                });
+            //     secondaryGroups.forEach(group => {
+            //         groups.push(GroupRepository.getGroupById(group));
+            //     });
 
-                member.secondaryGroups = groups;
-            } else {
-                member.secondaryGroups = null;
-            }
+            //     member.secondaryGroups = groups;
+            // } else {
+            //     member.secondaryGroups = null;
+            // }
+
+            member.widgets = data && data.widgets ? data.widgets : null;
         } else {
             member = this.populateGuestData(member);
         }
@@ -125,6 +129,9 @@ class MemberRepository {
         member.dateTime = Settings.get('defaultDateTime');
         member.primaryGroup = GroupRepository.getGroupById(Settings.get('guestGroupId'));
         member.secondaryGroups = null;
+        member.widgets = Settings.get('defaultWidgets');
+
+        return member;
     }
 }
 

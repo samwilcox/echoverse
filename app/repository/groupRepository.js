@@ -12,6 +12,7 @@
  */
 
 const DateTimeHelper = require('../helpers/dateTimeHelper');
+const TargetList = require('../lists/targetList');
 
 /**
  * Responsible for handling and retreival and construction of 'Group' entity.
@@ -26,7 +27,7 @@ class GroupRepository {
     static loadGroupDataById(groupId) {
         const CacheProviderFactory = require('../data/cache/cacheProviderFactory');
         const cache = CacheProviderFactory.create();
-        const data = cache.get('user_groups').find(group => group.id === parseInt(groupId, 10));
+        const data = cache.get(TargetList.GROUPS).find(group => group.id === parseInt(groupId, 10));
         return data || null;
     }
 
@@ -41,7 +42,7 @@ class GroupRepository {
         const Group = require('../entities/group');
         const group = new Group();
 
-        group.id = data ? data.id : groupId;
+        group.id = data && data.id ? parseInt(data.id) : groupId;
         group.sortOrder = parseInt(data.sortOrder, 10);
         group.name = data && data.name ? data.name : null;
         group.description = data && data.description ? data.description : null;

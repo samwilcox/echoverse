@@ -5,6 +5,7 @@
     "authorEmail": "sam@echoversebbs.com",
     "authorUrl": "https://www.echoversebbs.com",
     "files": [
-        "globals"
+        "globals.json",
+        "index.json"
     ]
 }

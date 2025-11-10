@@ -24,6 +24,15 @@ const toCache = () => {
         'locales',
         'themes',
         'member_devices',
+        'user_groups',
+        'features',
+        'widgets',
+        'registry',
+        'categories',
+        'forums',
+        'topics',
+        'posts',
+        'content_tracker',
     ];
 };
 

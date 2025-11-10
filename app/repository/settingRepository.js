@@ -12,6 +12,7 @@
  */
 
 const UtilHelper = require('../helpers/utilHelper');
+const InvalidError = require('../errors/invalidError');
 
 /**
  * Responsible for handling and retrieval and construction of setting entity.
@@ -39,66 +40,94 @@ class SettingRepository {
      */
     static buildSettingFromData(data, settingId) {
         const Setting = require('../entities/setting');
+
+        const safeStr = v => (v === null || v === undefined) ? '' : String(v);
+        const hasText = v => typeof v === 'string' ? v.trim().length > 0 : (v !== null && v!== undefined && String(v).trim().length > 0);
+        const parseJsonOrNull = v => {
+            if (!hasText(v)) return null;
+
+            try {
+                return (typeof v === 'string') ? JSON.parse(v) : v;
+            } catch (error) {
+                throw new InvalidError(`Invalid JSON: ${error.message}.`);
+            }
+        };
+        const toBool = v => {
+            if (typeof v === 'boolean') return v;
+            if (v === null || v === undefined) return false;
+            const s = String(v).trim().toLowerCase();
+            return s === 'true' || s === '1' || s === 'yes';
+        };
+        const toIntOr = (v, dflt) => {
+            if (v === null || v === undefined || String(v).trim() === '') return dflt;
+            const n = parseInt(v, 10);
+            return Number.isNaN(n) ? dflt : n;
+        };
+        const toFloatOr = (v, dflt) => {
+            if (v === null || v === undefined || String(v).trim() === '') return dflt;
+            const n = parseFloat(v);
+            return Number.isNaN(n) ? dflt : n;
+        };
+
         const setting = new Setting();
 
-        setting.id = data ? data.id : settingId;
-        setting.type = data && data.type ? data.type : null;
-        setting.name = data && data.name ? data.name : null;
-        setting.description = data && data.description ? data.description : null;
-        setting.category = data && data.catgory ? data.category : null;
+        setting.id = data.id ?? settingId;
+        setting.type = data.type ?? null;
+        setting.name = data.name ?? null;
+        setting.description = data.description ?? null;
+        setting.category = (data.category ?? data.catgory) ?? null;
 
         try {
             switch (setting.type) {
                 case 'serialized':
-                    setting.value = data.value.toString().length > 0 ? JSON.parse(data.value) : null;
-                    setting.defaultValue = data.defaultValue.toString().length > 0 ? JSON.parse(data.defaultValue) : null;
+                    const val = parseJsonOrNull(data.value);
+                    const def = parseJsonOrNull(data.defaultValue);
+
+                    setting.value = val;
+                    setting.defaultValue = def;
                     break;
 
                 case 'regexarray':
-                    let value = null, defaultValue = null;
+                    const valueArr = parseJsonOrNull(data.value) ?? [];
+                    const defaultArr = parseJsonOrNull(data.defaultValue) ?? [];
 
-                    if (data.value.toString().length > 0) {
-                        value = JSON.parse(data.value);
-                        defaultValue = JSON.parse(data.defaultValue);
+                    if (!Array.isArray(valueArr) || !Array.isArray(defaultArr)) {
+                        throw new Error('regexarray expects JSON arrays.');
                     }
 
-                    const arr = value.map(pattern => new RegExp(pattern));
-                    const arrDef = value.map(pattern => new RegExp(pattern));
+                    const arr = valueArr.map(p => new RegExp(String(p)));
+                    const arrDef = defaultArr.map(p => new RegExp(String(p)));
 
                     setting.value = arr;
                     setting.defaultValue = arrDef;
                     break;
 
                 case 'bool':
-                    setting.value = typeof data.value === 'string' ? data.value.toString() === 'true' : false;
-                    setting.defaultValue = typeof data.defaultValue === 'string' ? data.value.toString() === 'true' : false;
+                    setting.value = toBool(data.value);
+                    setting.defaultValue = toBool(data.defaultValue);
                     break;
 
                 case 'number':
-                    setting.value = data.value.toString().length > 0 ? parseInt(data.value, 10) : -1;
-                    setting.defaultValue = data.defaultValue.toString().length > 0 ? parseInt(data.defaultValue, 10) : -1;
+                    setting.value = toIntOr(data.value, -1);
+                    setting.defaultValue = toIntOr(data.defaultValue, -1);
                     break;
 
                 case 'float':
-                    const float = parseFloat(data.value);
-                    const defaultFloat = parseFloat(data.defaultValue);
+                    const f = toFloatOr(data.value, -1);
+                    const df = toFloatOr(data.defaultValue, -1);
 
-                    if (!isNaN(float)) {
-                        throw new Error(`Invalid float value for setting: ${data.name}.`);
-                    }
-
-                    setting.value = float;
-                    setting.defaultValue = !isNaN(defaultFloat) ? -1 : defaultFloat;
+                    setting.value = f;
+                    setting.defaultValue = df;
                     break;
 
                 case 'string':
-                    setting.value = data.value.toString();
-                    setting.defaultValue = data.defaultValue.toString();
+                    setting.value = safeStr(data.value);
+                    setting.defaultValue = safeStr(data.defaultValue);
                     break;
 
                 default:
-                    setting.value = data.value;
-                    setting.defaultValue = data.defaultValue;
+                    setting.value = (data.value === undefined) ? null : data.value;
+                    setting.defaultValue = (data.defaultValue == undefined) ? null : data.defaultValue;
                     break;
             }
         } catch (error) {

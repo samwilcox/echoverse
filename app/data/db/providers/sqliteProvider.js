@@ -55,30 +55,36 @@ class SqliteProvider extends DatabaseInterface {
      */
     query(sql) {
         return new Promise((resolve, reject) => {
+            if (!this._db) {
+                return reject(new Error('Database not connected. Call connect() first.'));
+            }
+
             if (!sql.query || typeof sql.query !== 'string') {
                 return reject(new Error('Invalid SQL query string.'));
             }
 
-            const isSelectQuery = sql.query.trim().toUpperCase().startsWith('SELECT');
+            const q = sql.query.trim();
+            const params = sql.values ?? [];
+            const isSelect = q.toUpperCase().startsWith('SELECT');
 
-            if (isSelectQuery) {
-                this._db.all(sql.query, sql.values || [], (error, rows) => {
+            if (isSelect) {
+                this._db.all(q, params || [], (error, rows) => {
                     if (error) {
                         UtilHelper.log(`Query error: ${error}.`, 'error');
                         return reject(error);
                     }
 
-                    resolve();
+                    resolve(rows);
                 });
             } else {
-                this._db.run(sql.query, sql.values || [], (error) => {
+                this._db.run(q, params, function (error) {
                     if (error) {
                         UtilHelper.log(`Query error: ${error}.`, 'error');
                         return reject(error);
                     }
-
-                    resolve();
                 });
+
+                return resolve({ lastID: this.lastID, changes: this.changes });
             }
         });
     }

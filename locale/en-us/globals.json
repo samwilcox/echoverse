@@ -1,3 +1,23 @@
 {
-    "guest": "Guest"
+    "forumsLink": "Forums",
+    "membersLink": "Members",
+    "whosOnlineLink": "Who's Online?",
+    "searchLink": "Search",
+    "helpLink": "Help",
+    "tagsLink": "Tags",
+    "groupsLink": "Groups",
+    "activityRegisterLink": "Activity Register",
+    "signInLink": "Sign In",
+    "createAccountLink": "Create Account",
+    "homeBreadcrumb": "Home",
+    "allTimes": "All times are <strong>${timeZone}</strong> (GMT ${gmt})",
+    "poweredBy": "Powered by ${link} v${version}",
+    "selectLanguageLink": "Select Language",
+    "selectThemeLink": "Select Theme",
+    "manageCookiesLink": "Manage Cookies",
+    "privacyPolicyLink": "Privacy Policy",
+    "contactUsLink": "Contact Us",
+    "guest": "Guest",
+    "collapseSidebar": "Collapse sidebar",
+    "expandSidebar": "Expand sidebar"
 }

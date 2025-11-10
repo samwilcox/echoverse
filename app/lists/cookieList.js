@@ -16,6 +16,7 @@
  */
 const CookieList = Object.freeze({
     AUTH_TOKEN: 'ECHOVERSE_MEMBER_AUTH_TOKEN',
+    CONTENT_TRACKER: 'ECHOVERSE_CONTENT_TRACKER',
 });
 
 module.exports = CookieList;

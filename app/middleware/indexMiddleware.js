@@ -19,6 +19,10 @@ const passport = require('passport');
 const ejsLayouts = require('express-ejs-layouts');
 const { secureStateMiddleware } = require('securestate');
 const sessionMiddleware = require('./sessionMiddleware');
+const memberMiddleware = require('./memberMiddleware');
+const localeMiddleware = require('./localeMiddleware');
+const viewEngineMiddleware = require('./viewEngineMiddleware');
+const UtilHelper = require('../helpers/utilHelper');
 
 /**
  * Setup all the middleware for Echoverse.
@@ -41,5 +45,11 @@ module.exports = (app) => {
             maxAge: parseInt(process.env.SESSION_COOKIE_MAX_AGE_SECONDS, 10),
         },
     }));
+    app.use(memberMiddleware);
     app.use(sessionMiddleware);
+    app.use(localeMiddleware(app));
+    app.use(viewEngineMiddleware);
+    app.use(ejsLayouts);
+
+    UtilHelper.log('Echoverse middleware has been setup.', 'debug');
 };

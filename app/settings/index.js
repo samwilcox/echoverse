@@ -79,7 +79,7 @@ class Settings {
             throw new Error('Setting key must be a string.');
         }
 
-        return this._settings.hsOwnProperty(key);
+        return this._settings.hasOwnProperty(key);
     }
 
     /**
@@ -89,6 +89,19 @@ class Settings {
      */
     static getAll() {
         return { ...this._settings };
+    }
+
+    /**
+     * Get the entire appliction settings normal object.
+     * 
+     * @returns {Object} The entire application settings normal object.
+     */
+    static getAllObjects() {
+        const obj = Object.fromEntries(
+            Object.entries(this._settings).map(([key, setting]) => [key, setting._value])
+        );
+
+        return obj;
     }
 }
 

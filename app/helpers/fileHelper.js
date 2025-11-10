@@ -173,6 +173,7 @@ class FileHelper {
      */
     static formatFileSize(bytes) {
         const Settings = require('../settings');
+
         if (bytes === 0) return "0 B";
 
         const sizeUnits = Settings.get('fileSizeUnits');

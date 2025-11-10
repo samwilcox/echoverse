@@ -40,7 +40,7 @@ class MemberService {
      * @returns {Member} The member entity object instance.
      */
     get member() {
-        return { ...this._member };
+        return this._member;
     }
 
     /**
@@ -58,7 +58,7 @@ class MemberService {
      * @returns {Session} The member's session entity object instance.
      */
     get session() {
-        return { ...this._session };
+        return this._session;
     }
 
     /**

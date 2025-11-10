@@ -32,6 +32,7 @@ class Member {
         this._dateTime = {};
         this._primaryGroup = null;
         this._secondaryGroups = null;
+        this._widgets = {};
     }
 
     /**
@@ -265,7 +266,25 @@ class Member {
      * @param {number[]|null} value - An array of group identifiers, null if not part of any secondary group. 
      */
     set secondaryGroups(value) {
-        this.secondaryGroups = value;
+        this._secondaryGroups = value;
+    }
+
+    /**
+     * Get the member's widget settings object.
+     * 
+     * @returns {Object} The member's widget settings object.
+     */
+    get widgets() {
+        return this._widgets;
+    }
+
+    /**
+     * Set the member's widget setting object.
+     * 
+     * @param {Object} value - The member's widget settings object.
+     */
+    set widgets(value) {
+        this._widgets = value;
     }
 
     /**
@@ -292,6 +311,7 @@ class Member {
             dateTime: this._dateTime,
             primaryGroup: this._primaryGroup,
             secondaryGroups: this._secondaryGroups,
+            widgets: this._widgets,
         };
     }
 
@@ -321,8 +341,51 @@ class Member {
         member.dateTime = obj.dateTime ?? {};
         member.primaryGroup = obj.primaryGroup ?? null;
         member.secondaryGroups = obj.secondaryGroups ?? null;
+        member.widgets = obj.widgets ?? null;
         
         return member;
+    }
+
+    /**
+     * Check if this user (member or guest) has moderator permissions.
+     * 
+     * @returns {boolean} True if has moderator permissions, false if not.
+     */
+    isModerator() {
+        if (this._primaryGroup.isModerator) {
+            return true;
+        }
+
+        if (this._secondaryGroups && this._secondaryGroups.length > 0) {
+            this._secondaryGroups.forEach(group => {
+                if (group.isModerator) {
+                    return true;
+                }
+            });
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if this user (member or guest) has administrative permissions.
+     * 
+     * @returns {boolean} True if has admin permissions, false if not.
+     */
+    isAdmin() {
+        if (this._primaryGroup.isAdmin) {
+            return true;
+        }
+
+        if (this._secondaryGroups && this._secondaryGroups.length > 0) {
+            this._secondaryGroups.forEach(group => {
+                if (group.isAdmin) {
+                    return true;
+                }
+            });
+        }
+
+        return false;
     }
 }
 

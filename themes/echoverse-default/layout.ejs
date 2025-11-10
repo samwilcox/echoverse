@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="robots" content="noindex">
+        <title><%- settings.communityTitle %></title>
+        <link rel="stylesheet" href="<%= baseUrl %>/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="<%= themeCssUrl %>/common.css">
+        <link rel="stylesheet" href="<%= themeCssUrl %>/hyperlinks.css">
+        <link rel="stylesheet" href="<%= themeCssUrl %>/forms.css">
+        <script src="<%= baseUrl %>/js/jquery.min.js"></script>
+        <script src="<%= baseUrl %>/js/jquery-ui.js"></script>
+        <script src="<%= baseUrl %>/js/common.js"></script>
+    </head>
+    <body>
+        <main>
+            <div class="menu">
+                <div class="header" id="menu-header">
+                    <div class="grid">
+                        <div class="left">
+                            <% if (member.signedIn) { %>
+                            
+                            <% } else { %>
+                                <i class="fa-solid fa-user"></i><%= locale.globals.guest %>
+                            <% } %>
+                        </div>
+                        <div class="right">
+                            <a href="javascript:void(0)" class="tooltip tooltip--right" data-title="<%= locale.globals.collapseSidebar %>"><i class="fa-solid fa-angles-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <span class="menu-links">
+                    <% if (member.signedIn) { %>
+                    
+                    <% } else { %>
+                        <a href="<%= urls.signIn %>"><i class="fa-solid fa-key"></i><%= locale.globals.signInLink %></a>
+                        <% if (settings.accountCreationEnabled) { %>
+                            <a href="<%= urls.createAccount %>"><i class="fa-solid fa-user-plus"></i><%= locale.globals.createAccountLink %></a>
+                        <% } %>
+                    <% } %>
+                    <div class="menu-links-divider"></div>
+                    <a href="<%= urls.forums %>"><i class="fa-solid fa-comments"></i><%= locale.globals.forumsLink %></a>
+                    <% if (featurePermissions[featureList.MEMBERS_LIST]) { %>
+                        <a href="<%= urls.members %>"><i class="fa-solid fa-users"></i><%= locale.globals.membersLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.WHOS_ONLINE]) { %>
+                        <a href="<%= urls.whosOnline %>"><i class="fa-solid fa-earth-americas"></i><%= locale.globals.whosOnlineLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.SEARCH]) { %>
+                        <a href="<%= urls.search %>"><i class="fa-solid fa-magnifying-glass"></i><%= locale.globals.searchLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.TAGS]) { %>
+                        <a href="<%= urls.tags %>"><i class="fa-solid fa-tags"></i><%= locale.globals.tagsLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.GROUPS]) { %>
+                        <a href="<%= urls.groups %>"><i class="fa-solid fa-users-viewfinder"></i><%= locale.globals.groupsLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.ACTIVITY_REGISTER]) { %>
+                        <a href="<%= urls.activityRegister %>"><i class="fa-regular fa-file-lines"></i><%= locale.globals.activityRegisterLink %></a>
+                    <% } %>
+                    <% if (featurePermissions[featureList.HELP]) { %>
+                        <a href="<%= urls.help %>"><i class="fa-solid fa-life-ring"></i><%= locale.globals.helpLink %></a>
+                    <% } %>
+                    <div class="menu-links-divider"></div>
+                    <a href="javascript:void(0)"><i class="fa-solid fa-language"></i><%= locale.globals.selectLanguageLink %></a>
+                    <a href="javascript:void(0)"><i class="fa-solid fa-paintbrush"></i><%= locale.globals.selectThemeLink %></a>
+                </span>
+            </div>
+            <div class="body">
+                <div class="header" id="body-header">
+                    <div class="grid">
+                        <div>
+                            <a href="<%- urls.forums %>" title="<%= settings.communityTitle %>">
+                            <% if (settings.communityLogoType == 'image') { %>
+                                <img src="<%= imagesetUrl %>/images/<%= settings.communityLogo %>">
+                            <% } else { %>
+                                <%- settings.communityTitle %>
+                            <% } %>
+                            </a>
+                        </div>
+                        <div class="align-right">Right</div>
+                    </div>
+                </div>
+                <div class="scroller">
+                    <div class="floater">
+                        <% if (widgets.none) { %>
+                            <%- body %>
+                        <% } else { %>
+                            <% if (widgets.left.enabled && widgets.right.enabled) { %>
+                                <div class="main-grid-full">
+                                    <div class="main-grid-left"><%- widgets.left.toHTML %></div>
+                                    <div>
+                                        <% if (widgets.top.enabled) { %>
+                                            <%- widgets.top.toHTML %>
+                                        <% } %>
+                                        <%- body %>
+                                        <% if (widgets.bottom.enabled) { %>
+                                            <%- widgets.bottom.toHTML %>
+                                        <% } %>
+                                    </div>
+                                    <div class="main-grid-right"><%- widgets.right.toHTML %></div>
+                                </div>
+                            <% } else if (widgets.left.enabled && !widgets.right.enabled) { %>
+                                <div class="main-grid-left-no-right">
+                                    <div class="main-grid-left"><%- widgets.left.toHTML %></div>
+                                    <div>
+                                        <% if (widgets.top.enabled) { %>
+                                            <%- widgets.top.toHTML %>
+                                        <% } %>
+                                        <%- body %>
+                                        <% if (widgets.bottom.enabled) { %>
+                                            <%- widgets.bottom.toHTML %>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% } else if (!widgets.left.enabled && widgets.right.enabled) { %>
+                                <div class="main-grid-right-no-left">
+                                    <div>
+                                        <% if (widgets.top.enabled) { %>
+                                            <%- widgets.top.toHTML %>
+                                        <% } %>
+                                        <%- body %>
+                                        <% if (widgets.bottom.enabled) { %>
+                                            <%- widgets.bottom.toHTML %>
+                                        <% } %>
+                                    </div>
+                                    <div class="main-grid-right"><%- widgets.right.toHTML %></div>
+                                </div>
+                            <% } else { %>
+                                <% if (widgets.top.enabled) { %>
+                                    <%- widgets.top.toHTML %>
+                                <% } %>
+                                <%- body %>
+                                <% if (widgets.bottom.enabled) { %>
+                                    <%- widgets.bottom.toHTML %>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+                <footer>
+                    <div class="floater">
+                        <div class="grid">
+                            <div class="left">
+                                <a href="<%= urls.manageCookies %>" target="_blank"><%= locale.globals.manageCookiesLink %></a>
+                                <% if (privacyPolicy.display) { %>
+                                    <a href="<%- privacyPolicy.url %>" target="_blank"><%= locale.globals.privacyPolicyLink %></a>
+                                <% } %>
+                                <% if (contactUs.display) { %>
+                                    <a href="<%- contactUs.url %>" target="_blank"><%= locale.globals.contactUsLink %></a>
+                                <% } %>
+                            </div>
+                            <div class="align-center"><%- allTimes %></div>
+                            <div class="right"><%- poweredBy %></div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </body>
+</html>
